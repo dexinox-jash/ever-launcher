@@ -1,0 +1,11 @@
+title: Ever Launcher
+description: Legal documentation for Ever Launcher — a minimalist Android launcher for intentional living.
+baseurl: "/ever-launcher"
+url: "https://dexinox-jash.github.io"
+theme: minima
+show_downloads: false
+header_pages:
+  - privacy.md
+  - terms.md
+  - eula.md
+  - sales-terms.md
