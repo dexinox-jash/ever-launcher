@@ -10,12 +10,12 @@ Search and replace these in **every** legal document before publishing.
 
 | Placeholder | What to put | Example |
 |-------------|-------------|---------|
-| `[YOUR FULL LEGAL NAME OR COMPANY NAME]` | Your legal name or registered business | "Jean Tremblay" or "1234567 Canada Inc." |
+| `[YOUR FULL LEGAL NAME OR COMPANY NAME]` | Your legal name or registered business | **Uxtra Creatives** ✅ |
 | `[YOUR CONTACT EMAIL]` | Monitored email for legal/privacy inquiries | "privacy@everlauncher.app" |
 | `[YOUR FULL ADDRESS, CITY, PROVINCE, POSTAL CODE, CANADA]` | Complete Canadian mailing address | "1234 Rue Saint-Denis, Montreal, Quebec H2X 3J6, Canada" |
 | `[YOUR PROVINCE]` | Province for governing law | "Quebec" |
 | `[YOUR CITY, YOUR PROVINCE]` | Arbitration seat city/province | "Montreal, Quebec" |
-| `[INSERT DATE]` | Date of publication (same in all docs) | "April 15, 2026" |
+| `[INSERT DATE]` | Date of publication (same in all docs) | **April 15, 2026** ✅ |
 
 ---
 
@@ -106,3 +106,5 @@ After filling in all placeholders, host the documents at these exact URLs:
 grep -r "\[YOUR\|INSERT DATE\]" .
 # Expected output: nothing (or only this checklist file)
 ```
+
+**Status:** Company name and date filled. Email and address placeholders still pending.

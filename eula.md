@@ -1,14 +1,14 @@
 # End User License Agreement (EULA) — EverLauncher
 
-**Effective Date:** [INSERT DATE]
-**Last Updated:** [INSERT DATE]
+**Effective Date:** April 15, 2026
+**Last Updated:** April 15, 2026
 **Version:** 1.0
 
 ---
 
 ## IMPORTANT LEGAL NOTICE — READ BEFORE INSTALLING OR USING EVERLAUNCHER
 
-This End User License Agreement ("EULA" or "Agreement") is a legally binding contract between **you** ("End User" or "you") and **[YOUR FULL LEGAL NAME OR COMPANY NAME]** ("Licensor," "we," "us," or "our"), the developer and owner of EverLauncher (the "Software").
+This End User License Agreement ("EULA" or "Agreement") is a legally binding contract between **you** ("End User" or "you") and **Uxtra Creatives** ("Licensor," "we," "us," or "our"), the developer and owner of EverLauncher (the "Software").
 
 **BY CLICKING "ACCEPT," DOWNLOADING, INSTALLING, OR OTHERWISE USING THE SOFTWARE, YOU ARE AGREEING TO BE BOUND BY THE TERMS OF THIS EULA. IF YOU DO NOT AGREE TO THE TERMS OF THIS EULA, DO NOT INSTALL OR USE THE SOFTWARE AND REQUEST A REFUND THROUGH GOOGLE PLAY IMMEDIATELY.**
 
@@ -164,11 +164,11 @@ Failure by the Licensor to enforce any provision of this EULA shall not constitu
 
 ## 10. Contact
 
-**[YOUR FULL LEGAL NAME OR COMPANY NAME]**
+**Uxtra Creatives**
 Email: [YOUR CONTACT EMAIL]
 Address: [YOUR FULL ADDRESS, CITY, PROVINCE, POSTAL CODE, CANADA]
 Website: https://everlauncher.app
 
 ---
 
-*This EULA was last reviewed and updated on [INSERT DATE].*
+*This EULA was last reviewed and updated on April 15, 2026.*

@@ -1,14 +1,14 @@
 # Privacy Policy — EverLauncher
 
-**Effective Date:** [INSERT DATE]
-**Last Updated:** [INSERT DATE]
+**Effective Date:** April 15, 2026
+**Last Updated:** April 15, 2026
 **Version:** 1.0
 
 ---
 
 ## 1. About This Policy
 
-This Privacy Policy describes how **EverLauncher** ("the App," "we," "us," or "our"), developed and published by **[YOUR FULL LEGAL NAME OR COMPANY NAME]** ("Developer"), handles information in connection with your use of the EverLauncher mobile application on Android devices.
+This Privacy Policy describes how **EverLauncher** ("the App," "we," "us," or "our"), developed and published by **Uxtra Creatives** ("Developer"), handles information in connection with your use of the EverLauncher mobile application on Android devices.
 
 This Policy is provided in compliance with Canada's *Personal Information Protection and Electronic Documents Act* (PIPEDA), S.C. 2000, c. 5, Quebec's *Act respecting the protection of personal information in the private sector* (Law 25 / Bill 64), Alberta's *Personal Information Protection Act* (PIPA), British Columbia's *Personal Information Protection Act* (PIPA BC), and all other applicable Canadian federal and provincial privacy legislation.
 
@@ -153,11 +153,11 @@ Your continued use of the App after any changes to this Policy constitutes your 
 
 For any privacy questions, concerns, or requests:
 
-**Developer:** [YOUR FULL LEGAL NAME OR COMPANY NAME]
+**Developer:** Uxtra Creatives
 **Email:** [YOUR CONTACT EMAIL]
 **Address:** [YOUR FULL ADDRESS, CITY, PROVINCE, POSTAL CODE, CANADA]
 **Website:** https://everlauncher.app
 
 ---
 
-*This Privacy Policy was last reviewed by the Developer on [INSERT DATE].*
+*This Privacy Policy was last reviewed by the Developer on April 15, 2026.*

@@ -1,14 +1,14 @@
 # Terms of Service — EverLauncher
 
-**Effective Date:** [INSERT DATE]
-**Last Updated:** [INSERT DATE]
+**Effective Date:** April 15, 2026
+**Last Updated:** April 15, 2026
 **Version:** 1.0
 
 ---
 
 ## IMPORTANT — PLEASE READ CAREFULLY
 
-These Terms of Service ("Terms") constitute a legally binding agreement between you ("User," "you," or "your") and **[YOUR FULL LEGAL NAME OR COMPANY NAME]** ("Developer," "we," "us," or "our"), a resident/entity of the Province of **[YOUR PROVINCE]**, Canada, governing your access to and use of the EverLauncher mobile application ("App").
+These Terms of Service ("Terms") constitute a legally binding agreement between you ("User," "you," or "your") and **Uxtra Creatives** ("Developer," "we," "us," or "our"), a resident/entity of the Province of **[YOUR PROVINCE]**, Canada, governing your access to and use of the EverLauncher mobile application ("App").
 
 **BY DOWNLOADING, INSTALLING, PURCHASING, OR USING THE APP, YOU AGREE TO BE BOUND BY THESE TERMS. IF YOU DO NOT AGREE TO ALL OF THESE TERMS, DO NOT DOWNLOAD, INSTALL, OR USE THE APP AND REQUEST A REFUND THROUGH GOOGLE PLAY WITHIN THE APPLICABLE REFUND WINDOW.**
 
@@ -275,11 +275,11 @@ Any notice to us under these Terms shall be given by email to **[YOUR EMAIL]** o
 
 For any questions or concerns regarding these Terms:
 
-**Developer:** [YOUR FULL LEGAL NAME OR COMPANY NAME]
+**Developer:** Uxtra Creatives
 **Email:** [YOUR CONTACT EMAIL]
 **Address:** [YOUR FULL ADDRESS, CITY, PROVINCE, POSTAL CODE, CANADA]
 **Website:** https://everlauncher.app
 
 ---
 
-*These Terms of Service were last reviewed and updated on [INSERT DATE].*
+*These Terms of Service were last reviewed and updated on April 15, 2026.*

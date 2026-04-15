@@ -23,8 +23,8 @@ This repository hosts our public legal documentation.
 
 ## Important Notice
 
-> ⚠️ **These documents contain placeholders** (such as `[INSERT DATE]`, `[YOUR CONTACT EMAIL]`, and `[YOUR FULL LEGAL NAME OR COMPANY NAME]`).  
-> They are published here as a drafting convenience. **Do not rely on the current versions as legally binding until all placeholders have been replaced.**
+> ⚠️ **Partially completed.** The company name (`Uxtra Creatives`) and effective date (`April 15, 2026`) have been filled in.  
+> Remaining placeholders (such as `[YOUR CONTACT EMAIL]` and `[YOUR FULL ADDRESS, CITY, PROVINCE, POSTAL CODE, CANADA]`) must still be replaced before these documents can be relied upon as legally binding.
 
 ---
 

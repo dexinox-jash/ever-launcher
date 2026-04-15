@@ -1,7 +1,7 @@
 # Sales and Purchase Terms — EverLauncher
 
-**Effective Date:** [INSERT DATE]
-**Last Updated:** [INSERT DATE]
+**Effective Date:** April 15, 2026
+**Last Updated:** April 15, 2026
 **Version:** 1.0
 
 ---
@@ -163,11 +163,11 @@ If you have questions about your purchase:
 1. **For payment, billing, or technical Google Play issues:** Contact [Google Play Support](https://support.google.com/googleplay)
 2. **For App-specific issues:** Contact us at **[YOUR EMAIL]**
 
-**Developer:** [YOUR FULL LEGAL NAME OR COMPANY NAME]
+**Developer:** Uxtra Creatives
 **Email:** [YOUR CONTACT EMAIL]
 **Address:** [YOUR FULL ADDRESS, CITY, PROVINCE, POSTAL CODE, CANADA]
 **Website:** https://everlauncher.app
 
 ---
 
-*These Sales Terms were last reviewed and updated on [INSERT DATE].*
+*These Sales Terms were last reviewed and updated on April 15, 2026.*
