@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>EverLauncher — Focus, simplified.</title>
+  <link rel="icon" type="image/png" href="icon.png" />
+  <style>
+    :root {
+      --lime: #C8FF00;
+      --dark: #0B0C0E;
+      --surface: #14161A;
+      --surface-2: #1E2127;
+      --text: #F5F6F8;
+      --muted: #9BA3AF;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      background: var(--dark);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 0 32px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      font-size: 1.25rem;
+      letter-spacing: -0.02em;
+    }
+    .brand img {
+      width: 36px; height: 36px; border-radius: 10px;
+    }
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 40px 0 24px;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 6vw, 3.5rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+    .hero h1 span {
+      color: var(--lime);
+    }
+    .hero p {
+      color: var(--muted);
+      font-size: 1.1rem;
+      max-width: 520px;
+      margin: 0 auto 28px;
+      line-height: 1.55;
+    }
+
+    /* CTAs */
+    .ctas {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 48px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 24px;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 1rem;
+      transition: transform .15s ease, box-shadow .15s ease;
+      cursor: pointer;
+      border: none;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary {
+      background: var(--lime);
+      color: var(--dark);
+      box-shadow: 0 6px 24px rgba(200,255,0,.25);
+    }
+    .btn-secondary {
+      background: var(--surface-2);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,.06);
+    }
+
+    /* Phone mockup */
+    .phone-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 64px;
+    }
+    .phone {
+      width: 280px;
+      height: 560px;
+      background: var(--surface);
+      border-radius: 36px;
+      border: 6px solid var(--surface-2);
+      box-shadow: 0 24px 80px rgba(0,0,0,.6), inset 0 0 0 2px rgba(255,255,255,.04);
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    .notch {
+      position: absolute;
+      top: 0; left: 50%; transform: translateX(-50%);
+      width: 120px; height: 24px;
+      background: var(--surface-2);
+      border-bottom-left-radius: 14px;
+      border-bottom-right-radius: 14px;
+      z-index: 2;
+    }
+    .screen {
+      flex: 1;
+      padding: 40px 18px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      overflow-y: auto;
+    }
+    .screen::-webkit-scrollbar { display: none; }
+
+    .widget {
+      background: var(--surface-2);
+      border-radius: 20px;
+      padding: 16px;
+    }
+    .widget-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .time { font-weight: 800; font-size: 1.6rem; letter-spacing: -0.02em; }
+    .date { color: var(--muted); font-size: .8rem; margin-top: 2px; }
+    .score-pill {
+      background: rgba(200,255,0,.12);
+      color: var(--lime);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: .75rem;
+      font-weight: 700;
+    }
+    .focus-bar {
+      height: 6px;
+      background: rgba(255,255,255,.06);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .focus-bar > div {
+      height: 100%;
+      width: 78%;
+      background: var(--lime);
+      border-radius: 999px;
+    }
+    .mode-label {
+      font-size: .7rem;
+      color: var(--muted);
+      margin-top: 8px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-weight: 600;
+    }
+
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      padding: 4px 0;
+    }
+    .app {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+    .app-icon {
+      width: 48px; height: 48px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-size: 1.3rem;
+      background: var(--surface-2);
+      border: 1px solid rgba(255,255,255,.04);
+      transition: transform .15s ease;
+    }
+    .app:hover .app-icon { transform: scale(1.08); }
+    .app-name {
+      font-size: .65rem;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .dock {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      background: rgba(255,255,255,.03);
+      border-radius: 24px;
+      padding: 12px;
+      margin-top: auto;
+    }
+
+    /* Features */
+    .section-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-bottom: 64px;
+    }
+    .feature {
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,.04);
+      border-radius: 20px;
+      padding: 22px;
+      transition: transform .15s ease, border-color .15s ease;
+    }
+    .feature:hover {
+      transform: translateY(-3px);
+      border-color: rgba(200,255,0,.15);
+    }
+    .feature h3 {
+      font-size: 1rem;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .feature p {
+      color: var(--muted);
+      font-size: .9rem;
+      line-height: 1.5;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: .85rem;
+      padding: 32px 0 48px;
+      border-top: 1px solid rgba(255,255,255,.04);
+    }
+    footer a { color: var(--lime); text-decoration: underline; text-underline-offset: 3px; }
+
+    @media (max-width: 520px) {
+      .phone { width: 260px; height: 520px; }
+      .ctas { flex-direction: column; align-items: center; }
+      .btn { width: 100%; max-width: 320px; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <img src="icon.png" alt="EverLauncher icon" />
+        <span>EverLauncher</span>
+      </div>
+    </header>
+
+    <section class="hero">
+      <h1>Focus, <span>simplified.</span></h1>
+      <p>A minimalist Android launcher that shows only the apps you need, when you need them. No clutter. No distractions.</p>
+      <div class="ctas">
+        <a class="btn btn-primary" href="https://github.com/dexinox-jash/ever-launcher/releases/latest" target="_blank" rel="noopener">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download APK
+        </a>
+        <a class="btn btn-secondary" href="#demo" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'}); return false;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Try Interactive Demo
+        </a>
+      </div>
+    </section>
+
+    <div class="phone-wrap" id="demo">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="widget">
+            <div class="widget-top">
+              <div>
+                <div class="time" id="clock">09:41</div>
+                <div class="date" id="date">Mon, Jan 12</div>
+              </div>
+              <div class="score-pill">Focus 78%</div>
+            </div>
+            <div class="focus-bar"><div></div></div>
+            <div class="mode-label">Work Mode Active</div>
+          </div>
+
+          <div class="app-grid">
+            <div class="app"><div class="app-icon">📧</div><div class="app-name">Gmail</div></div>
+            <div class="app"><div class="app-icon">💬</div><div class="app-name">Messages</div></div>
+            <div class="app"><div class="app-icon">🗒️</div><div class="app-name">Notes</div></div>
+            <div class="app"><div class="app-icon">🎵</div><div class="app-name">Music</div></div>
+            <div class="app"><div class="app-icon">🗺️</div><div class="app-name">Maps</div></div>
+            <div class="app"><div class="app-icon">📅</div><div class="app-name">Calendar</div></div>
+            <div class="app"><div class="app-icon">📷</div><div class="app-name">Camera</div></div>
+            <div class="app"><div class="app-icon">⚙️</div><div class="app-name">Settings</div></div>
+          </div>
+
+          <div class="dock">
+            <div class="app"><div class="app-icon">📞</div><div class="app-name">Phone</div></div>
+            <div class="app"><div class="app-icon">✉️</div><div class="app-name">Mail</div></div>
+            <div class="app"><div class="app-icon">🌐</div><div class="app-name">Browser</div></div>
+            <div class="app"><div class="app-icon">📸</div><div class="app-name">Camera</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section>
+      <h2 class="section-title">Why EverLauncher?</h2>
+      <div class="features">
+        <div class="feature">
+          <h3><span style="color:var(--lime)">🌅</span> Context-Aware Modes</h3>
+          <p>Morning, Work, Evening, and Sleep modes automatically surface the right apps at the right time.</p>
+        </div>
+        <div class="feature">
+          <h3><span style="color:var(--lime)">🛡️</span> Mindful Gates</h3>
+          <p>Add configurable friction before opening distracting apps so you choose with intention.</p>
+        </div>
+        <div class="feature">
+          <h3><span style="color:var(--lime)">📊</span> Focus Score</h3>
+          <p>Track your daily focus score with a 7-day history and visualize your progress.</p>
+        </div>
+        <div class="feature">
+          <h3><span style="color:var(--lime)">🔥</span> Focus Streaks</h3>
+          <p>Build momentum with streaks that reward consistent focused usage.</p>
+        </div>
+        <div class="feature">
+          <h3><span style="color:var(--lime)">🌙</span> AMOLED Dark Theme</h3>
+          <p>True black dark mode plus a clean light theme. Easy on the eyes, easy on battery.</p>
+        </div>
+        <div class="feature">
+          <h3><span style="color:var(--lime)">🔒</span> Zero Data Collection</h3>
+          <p>No ads, no subscriptions, no tracking. Your data stays on your device. Period.</p>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p>Built with focus. <a href="https://github.com/dexinox-jash/ever-launcher" target="_blank" rel="noopener">View on GitHub</a> · <a href="https://github.com/dexinox-jash/ever-launcher/releases/latest" target="_blank" rel="noopener">Download APK</a></p>
+      <p style="margin-top:8px; opacity:.7;">EverLauncher © dexinox-jash</p>
+    </footer>
+  </div>
+
+  <script>
+    function updateClock() {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      document.getElementById('clock').textContent = hours + ':' + minutes;
+      const options = { weekday: 'short', month: 'short', day: 'numeric' };
+      document.getElementById('date').textContent = now.toLocaleDateString('en-US', options);
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    // Tap apps to show a quick "mindful gate" toast
+    const screen = document.querySelector('.screen');
+    const apps = document.querySelectorAll('.app');
+    apps.forEach(app => {
+      app.addEventListener('click', () => {
+        const name = app.querySelector('.app-name').textContent;
+        const toast = document.createElement('div');
+        toast.textContent = 'Mindful Gate: Open ' + name + '?';
+        toast.style.cssText = 'position:absolute; bottom:90px; left:50%; transform:translateX(-50%) scale(.95); background:rgba(20,22,26,.95); color:#fff; padding:10px 16px; border-radius:12px; font-size:.8rem; font-weight:600; border:1px solid rgba(200,255,0,.2); opacity:0; transition:all .2s ease; pointer-events:none; z-index:5; white-space:nowrap;';
+        screen.appendChild(toast);
+        requestAnimationFrame(() => { toast.style.opacity = '1'; toast.style.transform = 'translateX(-50%) scale(1)'; });
+        setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 200); }, 1800);
+      });
+    });
+  </script>
+</body>
+</html>
