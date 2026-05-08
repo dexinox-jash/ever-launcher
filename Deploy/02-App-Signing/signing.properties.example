@@ -1,0 +1,8 @@
+# Copy this file to ever-launcher-android/app/signing.properties
+# and fill in your actual keystore credentials.
+# NEVER commit signing.properties to version control.
+
+storeFile=release.keystore
+storePassword=YOUR_STORE_PASSWORD
+keyAlias=everlauncher
+keyPassword=YOUR_KEY_PASSWORD

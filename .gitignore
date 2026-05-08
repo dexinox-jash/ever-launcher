@@ -1,0 +1,30 @@
+# Android / Gradle
+.gradle/
+build/
+.idea/
+local.properties
+*.iml
+*.hprof
+.cxx/
+*.apk
+*.aab
+
+# Signing / Secrets
+*.keystore
+*.jks
+signing.properties
+release.keystore
+app/release.keystore
+app/signing.properties
+
+# Agent tooling
+.skills/
+.claude-flow/
+.swarm/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

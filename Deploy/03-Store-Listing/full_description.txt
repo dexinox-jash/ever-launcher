@@ -1,0 +1,33 @@
+<b>Your phone, focused.</b>
+
+Ever Launcher is a minimalist Android home screen designed to reduce digital distraction and help you stay intentional. Instead of an endless grid of apps and notifications, Ever Launcher shows only what you need, exactly when you need it.
+
+<b>How it works</b>
+• <b>Focus Modes</b> — Your home screen automatically adapts based on the time of day. Morning work hours? See only your focus apps. Evening? Switch to Wind Down mode.
+• <b>Mindful Gates</b> — Add a intentional pause before opening distracting apps. Choose from a breathing exercise, an intention prompt, or a short delay.
+• <b>Focus Score</b> — Track your daily screen time, unlock count, and focus streaks. All data stays on your device. No accounts, no cloud, no tracking.
+
+<b>Key features</b>
+✓ Automatic time-based mode switching
+✓ Customizable focus modes and schedules
+✓ Mindful gates (Breathing, Intention, Delay)
+✓ On-device analytics and focus streaks
+✓ Clean themes: System, Light, Dark, and AMOLED
+✓ Custom font choices and sizes
+✓ Fully offline — no ads, no analytics SDKs, no subscriptions
+
+<b>Privacy first</b>
+Ever Launcher does not collect, transmit, or sell any personal data. Your usage statistics and focus scores are stored exclusively on your device. We don't use Firebase, Crashlytics, AdMob, or any third-party analytics tools.
+
+<b>One-time purchase</b>
+No subscriptions. No in-app purchases. Pay once and own it forever.
+
+<b>Permissions</b>
+• Usage Access — to calculate your personal Focus Score (on-device only)
+• Exact Alarm — to switch focus modes at your scheduled times
+
+<b>Requirements</b>
+Android 8.0+ (API 26)
+
+<b>Questions?</b>
+Visit https://dexinox-jash.github.io/ever-launcher/

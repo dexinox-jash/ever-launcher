@@ -1,0 +1,47 @@
+# Feature Graphic Specifications
+
+## Required Dimensions
+- **Width:** 1024 px
+- **Height:** 500 px
+- **Format:** PNG or JPG (PNG recommended for quality)
+- **Max file size:** 1 MB
+
+## Design Direction
+
+### Suggested Layout
+1. **Left 60%:** Large, clean typography
+   - Headline: "Your phone, focused."
+   - Subheadline: "A minimalist launcher for intentional living."
+2. **Right 40%:** Visual element
+   - A subtle phone mockup showing the Ever Launcher home screen (time + short app list)
+   - Or an abstract circular focus-ring graphic (inspired by the Focus Score ring UI)
+
+### Color Palette
+Use colors from the app's theme for consistency:
+
+| Theme | Background | Accent | Text Primary |
+|-------|------------|--------|--------------|
+| Light | #F5F5F0 | #2D5F2D | #111111 |
+| Dark | #1A1A1C | #C8FF00 | #F0F0F0 |
+
+**Recommendation:** Create two versions:
+1. Light version (for Play Store web desktop viewers)
+2. Dark version (optional, for A/B testing)
+
+The default Play Store listing should use the **Light version** as the primary feature graphic because it reads better on the dark Play Store web background.
+
+### Typography
+- Primary font: Serif (use Playfair Display or similar)
+- Secondary font: Clean sans-serif (Inter or Roboto)
+- Keep text large — it will be viewed as a thumbnail
+
+### Tools
+- **Canva** (free): Search "Google Play feature graphic" template
+- **Figma** (free): 1024×500 frame, export as PNG
+- **Photoshop / GIMP**: For more advanced compositing
+
+### What NOT to do
+- Do not include the Google Play logo
+- Do not include device brand logos (Samsung, Pixel, etc.)
+- Do not make text smaller than 48 px at 1024×500 resolution
+- Do not use stock photos of people looking at phones (looks generic)
