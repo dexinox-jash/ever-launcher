@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EverLauncher — Interactive Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --accent:#C8FF00;
+  --bg-amoled:#000000;
+  --bg-dark:#1A1A1C;
+  --bg-light:#F5F5F0;
+  --text-p-dark:#F0F0F0;
+  --text-s-dark:#888888;
+  --text-p-light:#111111;
+  --text-s-light:#666666;
+  --div-dark:rgba(255,255,255,0.15);
+  --div-light:rgba(0,0,0,0.1);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Inter',sans-serif;background:#0A0A0A;color:#F0F0F0;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;overflow-x:hidden;}
+
+/* Page header */
+.page-header{text-align:center;margin-bottom:32px;animation:fadeUp .8s ease-out;}
+.page-header h1{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:600;letter-spacing:-0.02em;margin-bottom:8px;}
+.page-header .badge{display:inline-block;background:var(--accent);color:#0A0A0A;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;padding:4px 12px;border-radius:4px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px;}
+.page-header p{color:#888;font-size:.95rem;max-width:400px;margin:0 auto;line-height:1.5;}
+
+/* Phone frame */
+.phone-wrap{animation:fadeUp 1s ease-out .2s both;}
+.phone{position:relative;width:360px;height:720px;background:var(--bg-amoled);border-radius:40px;box-shadow:0 0 0 12px #1a1a1a,0 25px 80px rgba(0,0,0,.7);overflow:hidden;}
+.phone::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:140px;height:28px;background:#1a1a1a;border-radius:0 0 20px 20px;z-index:10;}
+.phone::after{content:'';position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:100px;height:4px;background:#333;border-radius:2px;z-index:10;}
+
+/* Screen container */
+.screen{position:absolute;inset:0;padding:48px 20px 32px;display:flex;flex-direction:column;transition:opacity .25s ease-out,transform .25s ease-out;}
+.screen.hidden{opacity:0;pointer-events:none;transform:translateX(30px);}
+.screen.back{transform:translateX(-30px);}
+
+/* Theme classes */
+.theme-amoled{background:var(--bg-amoled);color:var(--text-p-dark);}
+.theme-dark{background:var(--bg-dark);color:var(--text-p-dark);}
+.theme-light{background:var(--bg-light);color:var(--text-p-light);}
+
+/* Launcher Home */
+.time-display{font-family:'Playfair Display',serif;font-size:48px;font-weight:500;line-height:1;letter-spacing:-0.02em;margin-bottom:4px;}
+.date-display{font-size:14px;color:var(--text-s-dark);margin-bottom:20px;}
+.theme-light .date-display{color:var(--text-s-light);}
+
+.mode-label{font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.15em;color:var(--accent);margin-bottom:6px;display:flex;align-items:center;gap:8px;}
+.mode-bar{height:2px;background:var(--accent);border-radius:1px;flex:1;opacity:.4;}
+.mode-bar-fill{height:100%;background:var(--accent);border-radius:1px;transition:width 1s ease-out;}
+
+.app-list{flex:1;overflow-y:auto;margin-top:8px;padding-bottom:20px;}
+.app-list::-webkit-scrollbar{display:none;}
+.app-item{padding:14px 0;border-bottom:1px dashed var(--div-dark);font-family:'Playfair Display',serif;font-size:18px;cursor:pointer;position:relative;transition:opacity .15s;user-select:none;}
+.theme-light .app-item{border-color:var(--div-light);}
+.app-item:active{opacity:.5;}
+.app-item.gated::after{content:'⚡';font-family:'Inter',sans-serif;font-size:10px;margin-left:8px;opacity:.5;}
+
+.hidden-count{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-s-dark);text-align:center;margin-top:auto;padding-top:16px;cursor:pointer;transition:color .2s;}
+.hidden-count:hover{color:var(--accent);}
+.theme-light .hidden-count{color:var(--text-s-light);}
+
+/* Hidden drawer */
+.hidden-drawer{position:absolute;inset:0;background:rgba(0,0,0,.95);z-index:20;padding:60px 24px 32px;transform:translateY(100%);transition:transform .35s cubic-bezier(.25,.8,.25,1);display:flex;flex-direction:column;}
+.hidden-drawer.open{transform:translateY(0);}
+.hidden-drawer h3{font-family:'JetBrains Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.15em;color:var(--accent);margin-bottom:16px;}
+.hidden-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;flex:1;overflow-y:auto;}
+.hidden-app{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;opacity:.4;transition:opacity .2s;}
+.hidden-app.active{opacity:1;}
+.hidden-app:active{transform:scale(.95);}
+.hidden-app-icon{width:48px;height:48px;border-radius:14px;background:var(--bg-dark);display:flex;align-items:center;justify-content:center;font-size:20px;border:1px solid var(--div-dark);}
+.hidden-app-name{font-size:10px;text-align:center;color:var(--text-s-dark);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.drawer-close{margin-top:16px;text-align:center;font-size:12px;color:var(--text-s-dark);cursor:pointer;padding:8px;}
+
+/* Mindful Gates */
+.gate-screen{position:absolute;inset:0;z-index:30;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 32px;text-align:center;background:inherit;opacity:0;pointer-events:none;transition:opacity .3s;}
+.gate-screen.active{opacity:1;pointer-events:auto;}
+
+.breathing-circle{width:120px;height:120px;border-radius:50%;border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;margin-bottom:32px;animation:breathe 4s ease-in-out infinite;}
+@keyframes breathe{0%,100%{transform:scale(.85);opacity:.6;}50%{transform:scale(1.15);opacity:1;}}
+.breathing-label{font-family:'JetBrains Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.15em;color:var(--accent);margin-bottom:8px;}
+.gate-title{font-family:'Playfair Display',serif;font-size:22px;margin-bottom:8px;}
+.gate-subtitle{font-size:14px;color:var(--text-s-dark);margin-bottom:32px;}
+.theme-light .gate-subtitle{color:var(--text-s-light);}
+.gate-btn{background:transparent;border:1px solid var(--div-dark);color:inherit;padding:12px 32px;font-family:'Inter',sans-serif;font-size:14px;cursor:pointer;border-radius:8px;transition:all .2s;}
+.gate-btn:hover{border-color:var(--accent);color:var(--accent);}
+.gate-btn.primary{background:var(--accent);color:#0A0A0A;border-color:var(--accent);}
+.gate-btn.primary:disabled{opacity:.4;cursor:not-allowed;}
+
+.intention-input{width:100%;background:transparent;border:1px solid var(--div-dark);padding:14px 16px;color:inherit;font-family:'Inter',sans-serif;font-size:15px;border-radius:10px;margin-bottom:20px;outline:none;}
+.intention-input:focus{border-color:var(--accent);}
+.gate-actions{display:flex;gap:12px;justify-content:center;width:100%;}
+
+.delay-bar{width:100%;height:4px;background:var(--div-dark);border-radius:2px;margin-bottom:12px;overflow:hidden;}
+.delay-fill{height:100%;background:var(--accent);border-radius:2px;transition:width 1s linear;}
+
+/* Toast */
+.toast{position:absolute;top:60px;left:50%;transform:translateX(-50%) translateY(-20px);background:rgba(40,40,40,.95);color:#fff;padding:10px 20px;border-radius:10px;font-size:13px;opacity:0;pointer-events:none;transition:all .3s;z-index:50;white-space:nowrap;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* Dashboard */
+.dash-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;}
+.dash-header h2{font-family:'Playfair Display',serif;font-size:20px;}
+.settings-icon{width:36px;height:36px;border-radius:10px;background:var(--bg-dark);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;border:1px solid var(--div-dark);transition:all .2s;}
+.settings-icon:hover{border-color:var(--accent);}
+.theme-light .settings-icon{background:#e8e8e8;border-color:var(--div-light);}
+
+.score-ring-wrap{width:180px;height:180px;margin:0 auto 24px;position:relative;}
+.score-ring-svg{width:100%;height:100%;transform:rotate(-90deg);}
+.score-ring-bg{fill:none;stroke:var(--div-dark);stroke-width:8;}
+.score-ring-fill{fill:none;stroke:var(--accent);stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset 1.2s ease-out;}
+.score-text{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.score-number{font-family:'Playfair Display',serif;font-size:48px;font-weight:600;line-height:1;}
+.score-label{font-size:11px;color:var(--text-s-dark);text-transform:uppercase;letter-spacing:.1em;margin-top:4px;}
+
+.streak{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:24px;font-size:15px;}
+.streak-best{font-size:12px;color:var(--text-s-dark);text-align:center;margin-top:4px;}
+
+.chart-wrap{display:flex;align-items:flex-end;justify-content:center;gap:8px;margin-bottom:32px;height:60px;}
+.chart-bar{width:28px;background:var(--accent);border-radius:4px 4px 0 0;opacity:.3;transition:height .6s ease-out,opacity .3s;}
+.chart-bar.filled{opacity:1;}
+.chart-labels{display:flex;justify-content:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-s-dark);margin-top:4px;}
+.chart-labels span{width:28px;text-align:center;}
+
+.mode-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--div-dark);cursor:pointer;transition:opacity .15s;}
+.mode-row:active{opacity:.5;}
+.mode-row .arrow{color:var(--text-s-dark);}
+
+.dash-btn{width:100%;padding:14px;background:transparent;border:1px solid var(--div-dark);color:inherit;font-family:'Inter',sans-serif;font-size:14px;border-radius:10px;margin-bottom:10px;cursor:pointer;text-align:left;display:flex;justify-content:space-between;align-items:center;transition:all .2s;}
+.dash-btn:hover{border-color:var(--accent);}
+
+/* Settings */
+.settings-back{display:flex;align-items:center;gap:8px;margin-bottom:24px;cursor:pointer;font-size:14px;color:var(--text-s-dark);}
+.settings-back:hover{color:inherit;}
+
+.section-header{font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.15em;color:var(--accent);margin:24px 0 12px;}
+.settings-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--div-dark);cursor:pointer;}
+.settings-row .value{color:var(--text-s-dark);font-size:14px;display:flex;align-items:center;gap:4px;}
+.settings-row:active{opacity:.5;}
+
+.toggle{width:44px;height:24px;background:var(--div-dark);border-radius:12px;position:relative;cursor:pointer;transition:background .2s;}
+.toggle::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;background:#fff;border-radius:50%;transition:transform .2s;}
+.toggle.on{background:var(--accent);}
+.toggle.on::after{transform:translateX(20px);background:#0A0A0A;}
+
+/* Gate config */
+.gate-app-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--div-dark);}
+.gate-app-row .app-name{font-family:'Playfair Display',serif;font-size:16px;}
+.gate-type{font-family:'JetBrains Mono',monospace;font-size:9px;text-transform:uppercase;padding:3px 8px;border-radius:4px;background:var(--bg-dark);color:var(--text-s-dark);cursor:pointer;transition:all .2s;}
+.gate-type:hover{color:var(--accent);}
+
+/* Animations */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+
+/* Responsive */
+@media(max-width:420px){.phone{transform:scale(.85);transform-origin:top center;}}
+@media(max-width:360px){.phone{transform:scale(.75);}}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="badge">Live Demo</div>
+  <h1>EverLauncher</h1>
+  <p>A minimalist Android launcher that helps you focus by showing only the apps you need, when you need them.</p>
+</div>
+
+<div class="phone-wrap">
+  <div class="phone" id="phone">
+    <!-- Launcher Home -->
+    <div class="screen" id="screen-home">
+      <div class="time-display" id="clock-time">9:41</div>
+      <div class="date-display" id="clock-date">Monday, May 8</div>
+      <div class="mode-label">
+        <span id="mode-name">FOCUS</span>
+        <span id="mode-remaining">· 2h 14m remaining</span>
+      </div>
+      <div class="mode-bar"><div class="mode-bar-fill" id="mode-progress" style="width:60%"></div></div>
+      <div class="app-list" id="app-list"></div>
+      <div class="hidden-count" id="hidden-count" onclick="showHidden()">12 apps hidden · focus</div>
+    </div>
+
+    <!-- Hidden Apps Drawer -->
+    <div class="hidden-drawer" id="hidden-drawer">
+      <h3>All Apps</h3>
+      <div class="hidden-grid" id="hidden-grid"></div>
+      <div class="drawer-close" onclick="hideHidden()">Swipe down to close</div>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="screen hidden" id="screen-dash">
+      <div class="dash-header">
+        <h2>Ever Launcher</h2>
+        <div class="settings-icon" onclick="goTo('settings')">⚙</div>
+      </div>
+      <div class="score-ring-wrap">
+        <svg class="score-ring-svg" viewBox="0 0 180 180">
+          <circle class="score-ring-bg" cx="90" cy="90" r="78"/>
+          <circle class="score-ring-fill" cx="90" cy="90" r="78" stroke-dasharray="490" stroke-dashoffset="490" id="score-ring"/>
+        </svg>
+        <div class="score-text">
+          <div class="score-number" id="score-num">78</div>
+          <div class="score-label">Today's Score</div>
+        </div>
+      </div>
+      <div class="streak">🔥 <span id="streak-count">12</span> day streak</div>
+      <div class="streak-best">Best: <span id="streak-best">23</span> days</div>
+      <div class="chart-wrap" id="chart-wrap"></div>
+      <div class="chart-labels" id="chart-labels"></div>
+      <div style="margin-top:24px;">
+        <div class="mode-row" onclick="cycleMode()">
+          <span>Current Mode: <span id="dash-mode">Focus</span></span>
+          <span class="arrow">▸</span>
+        </div>
+        <button class="dash-btn" onclick="goTo('gateconfig')">Mindful Gates <span>▸</span></button>
+        <button class="dash-btn" onclick="showToast('Mode editor coming soon')">Edit Modes <span>▸</span></button>
+      </div>
+    </div>
+
+    <!-- Settings -->
+    <div class="screen hidden" id="screen-settings">
+      <div class="settings-back" onclick="goBack()">← Back</div>
+      <div class="section-header">Appearance</div>
+      <div class="settings-row" onclick="cycleTheme()">
+        <span>Theme</span>
+        <span class="value" id="theme-val">AMOLED ▸</span>
+      </div>
+      <div class="settings-row" onclick="cycleFont()">
+        <span>Font</span>
+        <span class="value" id="font-val">Default ▸</span>
+      </div>
+      <div class="settings-row" onclick="cycleFontSize()">
+        <span>Font Size</span>
+        <span class="value" id="fontsize-val">Medium ▸</span>
+      </div>
+      <div class="section-header">Launcher</div>
+      <div class="settings-row" onclick="toggleSetting('showHidden')">
+        <span>Show hidden count</span>
+        <div class="toggle on" id="tog-hidden"></div>
+      </div>
+      <div class="settings-row" onclick="toggleSetting('showTimer')">
+        <span>Show mode timer</span>
+        <div class="toggle on" id="tog-timer"></div>
+      </div>
+      <div class="section-header">About</div>
+      <div class="settings-row">
+        <span>Version</span>
+        <span class="value">2.0.1</span>
+      </div>
+      <div class="settings-row">
+        <span>© 2026 EverLauncher</span>
+      </div>
+    </div>
+
+    <!-- Gate Config -->
+    <div class="screen hidden" id="screen-gateconfig">
+      <div class="settings-back" onclick="goBack()">← Mindful Gates</div>
+      <div style="font-size:13px;color:var(--text-s-dark);margin-bottom:16px;">Configure which apps require a mindful pause</div>
+      <div id="gate-list"></div>
+    </div>
+
+    <!-- Breathing Gate -->
+    <div class="gate-screen" id="gate-breathing">
+      <div class="breathing-label">Breathe in... Breathe out...</div>
+      <div class="breathing-circle"></div>
+      <div class="gate-title" id="breathe-app">Opening Instagram</div>
+      <div class="gate-subtitle" id="breathe-timer">in 5 seconds</div>
+      <button class="gate-btn" onclick="cancelGate()">Cancel</button>
+    </div>
+
+    <!-- Intention Gate -->
+    <div class="gate-screen" id="gate-intention">
+      <div class="gate-title">What are you opening<br><span id="intent-app">Instagram</span> for?</div>
+      <div class="gate-subtitle">Type at least 5 characters</div>
+      <input type="text" class="intention-input" id="intent-input" placeholder="Be honest with yourself..." oninput="checkIntent()">
+      <div class="gate-actions">
+        <button class="gate-btn" onclick="cancelGate()">Go Back</button>
+        <button class="gate-btn primary" id="intent-btn" onclick="passGate()" disabled>Continue</button>
+      </div>
+    </div>
+
+    <!-- Delay Gate -->
+    <div class="gate-screen" id="gate-delay">
+      <div class="gate-title" id="delay-app">Opening Instagram</div>
+      <div class="gate-subtitle" id="delay-timer">in 10s</div>
+      <div class="delay-bar"><div class="delay-fill" id="delay-bar" style="width:0%"></div></div>
+      <div class="gate-subtitle">No way to skip.<br>This is intentional.</div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+  </div>
+</div>
+
+<script>
+// ===== STATE =====
+const APPS={
+  productive:[{name:'Calendar',icon:'📅'},{name:'Mail',icon:'✉️'},{name:'Notes',icon:'📝'},{name:'Slack',icon:'💬'},{name:'Files',icon:'📁'},{name:'Browser',icon:'🌐'},{name:'Weather',icon:'🌤️'}],
+  neutral:[{name:'Phone',icon:'📞'},{name:'Messages',icon:'💬'},{name:'Camera',icon:'📷'},{name:'Maps',icon:'🗺️'},{name:'Music',icon:'🎵'},{name:'Photos',icon:'🖼️'},{name:'Clock',icon:'⏰'}],
+  distracting:[{name:'Instagram',icon:'📸'},{name:'TikTok',icon:'🎵'},{name:'YouTube',icon:'▶️'},{name:'Twitter',icon:'🐦'},{name:'Games',icon:'🎮'}]
+};
+const ALL_APPS=[...APPS.productive,...APPS.neutral,...APPS.distracting];
+const MODES=[
+  {name:'FOCUS',label:'Focus',start:9,end:17,days:[1,2,3,4,5],apps:['Calendar','Mail','Notes','Slack','Files']},
+  {name:'PERSONAL',label:'Personal',start:17,end:21,days:[1,2,3,4,5,6,0],apps:['Phone','Messages','Camera','Maps','Music']},
+  {name:'MORNING',label:'Morning',start:6,end:9,days:[0,1,2,3,4,5,6],apps:['Weather','Calendar','Notes','Music']},
+  {name:'SLEEP',label:'Sleep',start:21,end:6,days:[0,1,2,3,4,5,6],apps:['Clock']}
+];
+const GATE_TYPES=['breathing','intention','delay'];
+let state={
+  theme:'amoled',
+  fontSize:'medium',
+  showHidden:true,
+  showTimer:true,
+  modeOverride:null,
+  gates:JSON.parse(localStorage.getItem('el_gates')||'{}'),
+  score:parseInt(localStorage.getItem('el_score')||'78'),
+  streak:parseInt(localStorage.getItem('el_streak')||'12'),
+  bestStreak:parseInt(localStorage.getItem('el_best')||'23'),
+  history:JSON.parse(localStorage.getItem('el_history')||'[55,72,68,80,85,90,78]'),
+  screen:'home',
+  screenStack:[]
+};
+
+// Init gates default
+APPS.distracting.forEach(a=>{if(!state.gates[a.name])state.gates[a.name]={enabled:true,type:'breathing'};});
+
+// ===== HELPERS =====
+function save(){localStorage.setItem('el_gates',JSON.stringify(state.gates));localStorage.setItem('el_score',state.score);localStorage.setItem('el_streak',state.streak);localStorage.setItem('el_best',state.bestStreak);localStorage.setItem('el_history',JSON.stringify(state.history));}
+function $(id){return document.getElementById(id);}
+function getCurrentMode(){
+  if(state.modeOverride)return MODES.find(m=>m.label.toLowerCase()===state.modeOverride.toLowerCase())||MODES[0];
+  const now=new Date();const h=now.getHours();const d=now.getDay();
+  for(const m of MODES){if(m.days.includes(d)){if(m.start<m.end){if(h>=m.start&&h<m.end)return m;}else{if(h>=m.start||h<m.end)return m;}}}
+  return MODES[0];
+}
+function getModeApps(mode){return mode.apps.map(n=>ALL_APPS.find(a=>a.name===n)).filter(Boolean);}
+function isGated(appName){const g=state.gates[appName];return g&&g.enabled;}
+
+// ===== THEME =====
+function applyTheme(){
+  const p=$('phone');p.className='phone theme-'+state.theme;
+  const cols={amoled:{bg:'#000',tp:'#F0F0F0',ts:'#888'},dark:{bg:'#1A1A1C',tp:'#F0F0F0',ts:'#888'},light:{bg:'#F5F5F0',tp:'#111',ts:'#666'}};
+  const c=cols[state.theme];
+  p.style.background=c.bg;p.style.color=c.tp;
+  document.querySelectorAll('.date-display,.hidden-count,.gate-subtitle,.score-label,.streak-best,.settings-back,.chart-labels span,.settings-row .value,.drawer-close,.hidden-app-name').forEach(el=>{el.style.color=c.ts;});
+  document.querySelectorAll('.app-item').forEach(el=>{el.style.borderColor=state.theme==='light'?'rgba(0,0,0,0.1)':'rgba(255,255,255,0.15)';});
+  document.querySelectorAll('.settings-icon').forEach(el=>{el.style.background=state.theme==='light'?'#e8e8e8':'var(--bg-dark)';el.style.borderColor=state.theme==='light'?'rgba(0,0,0,0.1)':'var(--div-dark)';});
+}
+
+// ===== CLOCK =====
+function updateClock(){
+  const now=new Date();
+  $('clock-time').textContent=now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',hour12:true});
+  $('clock-date').textContent=now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+  updateModeDisplay();
+}
+setInterval(updateClock,1000);updateClock();
+
+// ===== MODE DISPLAY =====
+function updateModeDisplay(){
+  const mode=getCurrentMode();
+  $('mode-name').textContent=mode.name;
+  const now=new Date();const h=now.getHours();const m=now.getMinutes();
+  let endH=mode.end;let remMin;
+  if(mode.start<mode.end){remMin=(endH-h)*60-m;if(remMin<0)remMin+=24*60;}else{if(h>=mode.start){remMin=(24-h+endH)*60-m;}else{remMin=(endH-h)*60-m;}}
+  const remH=Math.floor(remMin/60);const remM=remMin%60;
+  $('mode-remaining').textContent='· '+remH+'h '+remM+'m remaining';
+  const totalMin=mode.start<mode.end?(mode.end-mode.start)*60:(24-mode.start+mode.end)*60;
+  const elapsed=totalMin-remMin;
+  $('mode-progress').style.width=Math.max(0,Math.min(100,(elapsed/totalMin)*100))+'%';
+  renderApps();
+}
+
+// ===== APP LIST =====
+function renderApps(){
+  const mode=getCurrentMode();
+  const apps=getModeApps(mode);
+  const list=$('app-list');
+  list.innerHTML=apps.map(a=>`<div class="app-item ${isGated(a.name)?'gated':''}" onclick="tapApp('${a.name}')">${a.name}</div>`).join('<div style="border-bottom:1px dashed '+(state.theme==='light'?'rgba(0,0,0,0.1)':'rgba(255,255,255,0.15)')+'"></div>');
+  const hidden=ALL_APPS.length-apps.length;
+  $('hidden-count').textContent=state.showHidden?hidden+' apps hidden · '+mode.label.toLowerCase():'';
+  $('hidden-count').style.display=state.showHidden?'block':'none';
+}
+
+function tapApp(name){
+  if(isGated(name)){openGate(name);return;}
+  showToast('Opening '+name+'...');
+  setTimeout(()=>{state.score=Math.min(100,state.score+1);save();},500);
+}
+
+// ===== HIDDEN DRAWER =====
+function showHidden(){
+  const mode=getCurrentMode();
+  const modeApps=new Set(mode.apps);
+  const grid=$('hidden-grid');
+  grid.innerHTML=ALL_APPS.map(a=>{
+    const active=modeApps.has(a.name);
+    return `<div class="hidden-app ${active?'active':''}" onclick="tapApp('${a.name}')">
+      <div class="hidden-app-icon">${a.icon}</div>
+      <div class="hidden-app-name">${a.name}</div>
+    </div>`;
+  }).join('');
+  $('hidden-drawer').classList.add('open');
+}
+function hideHidden(){$('hidden-drawer').classList.remove('open');}
+
+// ===== GATES =====
+let gateTimer=null;
+function openGate(appName){
+  const g=state.gates[appName]||{type:'breathing'};
+  const type=g.type;
+  if(type==='breathing'){openBreathing(appName);}
+  else if(type==='intention'){openIntention(appName);}
+  else{openDelay(appName);}
+}
+function openBreathing(appName){
+  $('breathe-app').textContent='Opening '+appName;
+  let sec=5;$('breathe-timer').textContent='in '+sec+' seconds';
+  $('gate-breathing').classList.add('active');
+  gateTimer=setInterval(()=>{sec--;$('breathe-timer').textContent='in '+sec+' second'+(sec!==1?'s':'');if(sec<=0){clearInterval(gateTimer);closeGate();showToast('Opening '+appName+'...');state.score=Math.max(0,state.score-2);save();}},1000);
+}
+function openIntention(appName){
+  $('intent-app').textContent=appName;
+  $('intent-input').value='';
+  $('intent-btn').disabled=true;
+  $('gate-intention').classList.add('active');
+}
+function checkIntent(){
+  const val=$('intent-input').value;
+  $('intent-btn').disabled=val.length<5;
+}
+function openDelay(appName){
+  $('delay-app').textContent='Opening '+appName;
+  let sec=10;$('delay-timer').textContent='in '+sec+'s';
+  $('delay-bar').style.width='0%';
+  $('gate-delay').classList.add('active');
+  gateTimer=setInterval(()=>{sec--;$('delay-timer').textContent='in '+sec+'s';$('delay-bar').style.width=((10-sec)/10*100)+'%';if(sec<=0){clearInterval(gateTimer);closeGate();showToast('Opening '+appName+'...');state.score=Math.max(0,state.score-2);save();}},1000);
+}
+function cancelGate(){if(gateTimer){clearInterval(gateTimer);gateTimer=null;}closeGate();}
+function passGate(){cancelGate();showToast('App opened');}
+function closeGate(){
+  document.querySelectorAll('.gate-screen').forEach(s=>s.classList.remove('active'));
+}
+
+// ===== TOAST =====
+let toastTimer=null;
+function showToast(msg){
+  const t=$('toast');t.textContent=msg;t.classList.add('show');
+  if(toastTimer)clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),2000);
+}
+
+// ===== NAVIGATION =====
+function goTo(screen){
+  state.screenStack.push(state.screen);
+  state.screen=screen;
+  showScreen(screen);
+}
+function goBack(){
+  const prev=state.screenStack.pop()||'home';
+  state.screen=prev;
+  showScreen(prev,true);
+}
+function showScreen(name,back=false){
+  document.querySelectorAll('.screen').forEach(s=>{s.classList.add('hidden');s.classList.remove('back');});
+  const target=$('screen-'+name);
+  if(target){target.classList.remove('hidden');if(back)target.classList.add('back');}
+  if(name==='dash')renderDash();
+  if(name==='gateconfig')renderGateConfig();
+}
+
+// ===== DASHBOARD =====
+function renderDash(){
+  const offset=490-(490*state.score/100);
+  $('score-ring').style.strokeDashoffset=offset;
+  $('score-num').textContent=state.score;
+  $('streak-count').textContent=state.streak;
+  $('streak-best').textContent=state.bestStreak;
+  $('dash-mode').textContent=getCurrentMode().label;
+  const chart=$('chart-wrap');const labels=$('chart-labels');
+  const days=['M','T','W','T','F','S','S'];
+  chart.innerHTML=state.history.map((v,i)=>`<div class="chart-bar ${v>0?'filled':''}" style="height:${v}%"></div>`).join('');
+  labels.innerHTML=days.map(d=>`<span>${d}</span>`).join('');
+  setTimeout(()=>document.querySelectorAll('.chart-bar').forEach((b,i)=>{b.style.height=state.history[i]+'%';}),50);
+}
+function cycleMode(){
+  const idx=MODES.findIndex(m=>m.label.toLowerCase()===getCurrentMode().label.toLowerCase());
+  const next=MODES[(idx+1)%MODES.length];
+  state.modeOverride=next.label.toLowerCase();
+  save();renderDash();renderApps();showToast('Switched to '+next.label);
+}
+
+// ===== SETTINGS =====
+function cycleTheme(){
+  const themes=['amoled','dark','light'];
+  state.theme=themes[(themes.indexOf(state.theme)+1)%themes.length];
+  $('theme-val').textContent=state.theme.charAt(0).toUpperCase()+state.theme.slice(1)+' ▸';
+  applyTheme();save();
+}
+function cycleFont(){showToast('Font switch coming soon');}
+function cycleFontSize(){
+  const sizes=['small','medium','large'];
+  state.fontSize=sizes[(sizes.indexOf(state.fontSize)+1)%sizes.length];
+  $('fontsize-val').textContent=state.fontSize.charAt(0).toUpperCase()+state.fontSize.slice(1)+' ▸';
+  const sz={small:'14px',medium:'18px',large:'22px'};
+  document.querySelectorAll('.app-item').forEach(el=>el.style.fontSize=sz[state.fontSize]);
+  save();
+}
+function toggleSetting(key){
+  state[key]=!state[key];
+  const map={showHidden:'tog-hidden',showTimer:'tog-timer'};
+  const el=$(map[key]);if(el)el.classList.toggle('on');
+  if(key==='showHidden')renderApps();
+  save();
+}
+
+// ===== GATE CONFIG =====
+function renderGateConfig(){
+  const list=$('gate-list');
+  const gated=[...APPS.distracting,...APPS.neutral,...APPS.productive];
+  list.innerHTML=gated.map(a=>{
+    const g=state.gates[a.name]||{enabled:false,type:'breathing'};
+    return `<div class="gate-app-row">
+      <span class="app-name">${a.icon} ${a.name}</span>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="gate-type" onclick="cycleGateType('${a.name}')">${g.type}</span>
+        <div class="toggle ${g.enabled?'on':''}" onclick="toggleGate('${a.name}')"></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+function toggleGate(appName){
+  if(!state.gates[appName])state.gates[appName]={enabled:false,type:'breathing'};
+  state.gates[appName].enabled=!state.gates[appName].enabled;
+  save();renderGateConfig();renderApps();
+}
+function cycleGateType(appName){
+  if(!state.gates[appName])state.gates[appName]={enabled:false,type:'breathing'};
+  const idx=GATE_TYPES.indexOf(state.gates[appName].type);
+  state.gates[appName].type=GATE_TYPES[(idx+1)%GATE_TYPES.length];
+  save();renderGateConfig();
+}
+
+// ===== INIT =====
+applyTheme();
+updateClock();
+renderApps();
+
+// Long press to open dashboard
+let pressTimer=null;
+const home=$('screen-home');
+home.addEventListener('mousedown',()=>{pressTimer=setTimeout(()=>goTo('dash'),600);});
+home.addEventListener('touchstart',()=>{pressTimer=setTimeout(()=>goTo('dash'),600);});
+home.addEventListener('mouseup',()=>clearTimeout(pressTimer));
+home.addEventListener('touchend',()=>clearTimeout(pressTimer));
+home.addEventListener('mouseleave',()=>clearTimeout(pressTimer));
+
+// Swipe up for hidden drawer
+let startY=0;
+home.addEventListener('touchstart',e=>{startY=e.touches[0].clientY;},{passive:true});
+home.addEventListener('touchend',e=>{const dy=startY-e.changedTouches[0].clientY;if(dy>60)showHidden();},{passive:true});
+
+// Auto-update mode every minute
+setInterval(updateModeDisplay,60000);
+</script>
+</body>
+</html>
